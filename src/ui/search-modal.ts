@@ -26,6 +26,13 @@ export class BookSearchModal extends Modal {
     contentEl.empty();
     contentEl.addClass('kr-book-search-modal');
 
+    // 모달 크기 설정
+    this.modalEl.style.width = '90vw';
+    this.modalEl.style.maxWidth = '900px';
+    this.modalEl.style.height = '85vh';
+    this.modalEl.style.maxHeight = '700px';
+    this.modalEl.style.minHeight = '500px';
+
     // 제목
     contentEl.createEl('h2', { text: '📚 도서 검색' });
 
