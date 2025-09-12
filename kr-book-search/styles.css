@@ -1,0 +1,440 @@
+/* 한국 도서 검색 플러그인 스타일 */
+
+.kr-book-search-modal {
+  max-width: 900px;
+  width: 90vw;
+  max-height: 80vh;
+}
+
+.kr-book-search-modal .modal-content {
+  padding: 20px;
+}
+
+/* 검색 컨테이너 */
+.search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px 12px !important;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px var(--interactive-accent-hover);
+}
+
+/* 검색 타입 컨테이너 */
+.search-type-container {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+}
+
+/* 고급 검색 옵션 */
+.advanced-search {
+  margin-bottom: 20px;
+}
+
+.advanced-toggle {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.advanced-toggle:hover {
+  background: var(--background-modifier-hover);
+}
+
+.advanced-options {
+  margin-top: 10px;
+  padding: 15px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+/* 로딩 상태 */
+.loading-container {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.loading-text {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-normal);
+}
+
+.loading-subtext {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* 에러 상태 */
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+  border: 1px solid var(--background-modifier-error);
+  border-radius: 8px;
+  background: var(--background-secondary);
+}
+
+.error-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-error);
+  margin-bottom: 8px;
+}
+
+.error-message {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+/* 검색 결과 없음 */
+.no-results-container {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.no-results-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-normal);
+}
+
+.no-results-suggestion {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* 검색 결과 */
+.search-results {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+}
+
+.results-header {
+  padding: 15px 20px;
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--background-modifier-border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.results-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+/* 검색 결과 아이템 */
+.result-item {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.result-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-index {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--interactive-accent);
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 15px;
+  flex-shrink: 0;
+  line-height: 30px;
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-title {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-normal);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.book-details {
+  margin-bottom: 12px;
+}
+
+.book-detail-row {
+  display: flex;
+  margin-bottom: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: var(--text-muted);
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: var(--text-normal);
+  word-wrap: break-word;
+  flex: 1;
+}
+
+.detail-isbn {
+  font-family: var(--font-monospace);
+  font-size: 13px;
+}
+
+/* 추가 정보 태그들 */
+.book-extra-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.extra-tag {
+  padding: 4px 8px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ebook-tag {
+  background: var(--interactive-accent-hover);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* 액션 버튼들 */
+.book-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+.book-actions .clickable-icon {
+  min-width: 100px;
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-info {
+  padding: 8px 16px;
+  background: var(--background-secondary);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+}
+
+/* 설정 탭 스타일 */
+.template-setting textarea {
+  width: 100%;
+  min-height: 400px;
+  font-family: var(--font-monospace);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 15px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  resize: vertical;
+}
+
+.template-setting textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px var(--interactive-accent-hover);
+}
+
+.setting-item-description {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.setting-item-description details {
+  margin-top: 10px;
+}
+
+.setting-item-description summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-normal);
+  padding: 5px 0;
+}
+
+.setting-item-description summary:hover {
+  color: var(--interactive-accent);
+}
+
+.setting-item-description ul {
+  margin: 10px 0 0 20px;
+  padding: 0;
+}
+
+.setting-item-description li {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .kr-book-search-modal {
+    width: 95vw;
+    max-height: 85vh;
+  }
+  
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .result-item {
+    flex-direction: column;
+    padding: 15px;
+  }
+  
+  .result-index {
+    align-self: flex-start;
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+  
+  .book-actions {
+    flex-direction: row;
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  
+  .book-actions .clickable-icon {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* 다크 모드 최적화 */
+.theme-dark .search-input {
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.theme-dark .extra-tag {
+  background: var(--background-primary-alt);
+  border-color: var(--background-modifier-border-hover);
+}
+
+.theme-dark .result-item:hover {
+  background: var(--background-primary-alt);
+}
+
+/* 접근성 개선 */
+.clickable-icon:focus,
+.search-input:focus,
+.advanced-toggle:focus {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
+/* 애니메이션 */
+.result-item,
+.extra-tag,
+.clickable-icon {
+  transition: all 0.2s ease;
+}
+
+.result-index {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-item:hover .result-index {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 스크롤바 스타일링 */
+.search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-results::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+  border-radius: 4px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: var(--background-modifier-border);
+  border-radius: 4px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+  background: var(--background-modifier-border-hover);
+}
