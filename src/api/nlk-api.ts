@@ -197,8 +197,26 @@ export class NationalLibraryAPI {
     console.log(`🔍 [ISBN] Searching for ISBN: ${isbn}`);
     
     try {
-      // ISBN 서지정보 API로 상세 정보 검색
-      const isbnData = await this.fetchISBNData(isbn);
+      // 먼저 ISBN 서지정보 API로 시도
+      let isbnData = await this.fetchISBNData(isbn);
+      
+      // ISBN API에서 결과가 없으면 일반 검색 API로 시도
+      if (!isbnData || isbnData.length === 0) {
+        console.log(`🔍 [ISBN] No results from ISBN API, trying general search...`);
+        const generalResults = await this.searchBooks({ query: isbn.replace(/[-\s]/g, '') });
+        
+        if (generalResults.length > 0) {
+          // 일반 검색 결과에서 ISBN이 일치하는 책 찾기
+          const matchingBook = generalResults.find(book => 
+            book.isbn && book.isbn.replace(/[-\s]/g, '') === isbn.replace(/[-\s]/g, '')
+          );
+          
+          if (matchingBook) {
+            console.log('✅ [ISBN] Found matching book via general search:', matchingBook);
+            return matchingBook;
+          }
+        }
+      }
       
       if (isbnData && isbnData.length > 0) {
         const bookData = isbnData[0];
@@ -243,28 +261,73 @@ export class NationalLibraryAPI {
    * ISBN 서지정보 API 호출
    */
   private async fetchISBNData(isbn: string): Promise<any[]> {
+    console.log(`📘 [ISBN API] Starting API call for ISBN: ${isbn}`);
+    
+    const cleanIsbn = isbn.replace(/[-\s]/g, '');
+    console.log(`📘 [ISBN API] Cleaned ISBN: ${cleanIsbn}`);
+    
     const searchParams = new URLSearchParams();
     searchParams.set('key', this.apiKey);
     searchParams.set('target', 'isbn');
-    searchParams.set('isbn', isbn.replace(/[-\s]/g, ''));
+    searchParams.set('isbn', cleanIsbn);
     
     const url = `${this.BASE_URL}${this.ISBN_API}?${searchParams.toString()}`;
+    console.log(`📘 [ISBN API] Request URL: ${url}`);
     
-    const response = await requestUrl({
-      url,
-      method: 'GET',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-        'Accept': 'application/json, text/plain, */*'
+    try {
+      const response = await requestUrl({
+        url,
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Accept': 'application/json, text/plain, */*'
+        }
+      });
+      
+      console.log(`📘 [ISBN API] Response status: ${response.status}`);
+      console.log(`📘 [ISBN API] Response headers:`, response.headers);
+      
+      if (response.status === 200) {
+        let data;
+        if (response.json) {
+          data = response.json;
+          console.log(`📘 [ISBN API] Got JSON response:`, data);
+        } else if (response.text) {
+          console.log(`📘 [ISBN API] Got text response (first 500 chars):`, response.text.substring(0, 500));
+          try {
+            data = JSON.parse(response.text);
+            console.log(`📘 [ISBN API] Parsed JSON:`, data);
+          } catch (parseError) {
+            console.error(`❌ [ISBN API] JSON parse error:`, parseError);
+            console.log(`📘 [ISBN API] Raw response text:`, response.text);
+            return [];
+          }
+        } else {
+          console.error(`❌ [ISBN API] No response data`);
+          return [];
+        }
+        
+        if (data.error || data.errorCode) {
+          console.error(`❌ [ISBN API] API returned error:`, data);
+          return [];
+        }
+        
+        const docs = data.docs || data.result || [];
+        console.log(`📘 [ISBN API] Found ${docs.length} documents`);
+        
+        if (docs.length > 0) {
+          console.log(`📘 [ISBN API] First document:`, docs[0]);
+        }
+        
+        return docs;
+      } else {
+        console.error(`❌ [ISBN API] HTTP ${response.status} error`);
+        return [];
       }
-    });
-    
-    if (response.status === 200) {
-      const data = response.json || JSON.parse(response.text);
-      return data.docs || [];
+    } catch (error) {
+      console.error(`❌ [ISBN API] Request failed:`, error);
+      return [];
     }
-    
-    return [];
   }
 
   /**

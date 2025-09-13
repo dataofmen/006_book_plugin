@@ -308,19 +308,29 @@ export class BookSearchModal extends Modal {
       new ButtonComponent(actions)
         .setButtonText('🔗 상세보기')
         .onClick(() => {
+          console.log('🔗 Detail view button clicked for book:', book.title);
+          
           if (book.detailLink && book.detailLink.trim()) {
             // 제공된 상세 링크가 있으면 그것을 사용
+            console.log('🔗 Opening provided detail link:', book.detailLink);
             window.open(book.detailLink, '_blank');
-          } else if (book.isbn) {
-            // ISBN이 있으면 국립중앙도서관 ISBN 검색 결과로 링크
-            const searchUrl = `https://www.nl.go.kr/kolisnet/search/searchResultList.do?tab=book&searchKeyword=${encodeURIComponent(book.isbn)}&searchField=isbn`;
+            new Notice('🔗 상세 정보 페이지를 여는 중...');
+          } else if (book.isbn && book.isbn.trim()) {
+            // ISBN이 있으면 국립중앙도서관 통합검색으로 링크
+            const cleanIsbn = book.isbn.replace(/[-\s]/g, '');
+            const searchUrl = `https://www.nl.go.kr/NL/search/SearchResultWonmun.do?category=search&f1=title&v1=&f2=author&v2=&f3=pubDt&v3=&f4=category&v4=&f5=callNo&v5=&f6=isbn&v6=${encodeURIComponent(cleanIsbn)}&pageNum=1&pageSize=10&order=score&sort=desc`;
+            console.log('🔗 Opening National Library ISBN search:', searchUrl);
             window.open(searchUrl, '_blank');
-          } else if (book.title) {
-            // 제목으로 국립중앙도서관 검색
-            const searchUrl = `https://www.nl.go.kr/kolisnet/search/searchResultList.do?tab=book&searchKeyword=${encodeURIComponent(book.title)}`;
+            new Notice(`🔗 ISBN(${book.isbn})로 국립중앙도서관에서 검색 중...`);
+          } else if (book.title && book.title.trim()) {
+            // 제목으로 국립중앙도서관 통합검색
+            const searchUrl = `https://www.nl.go.kr/NL/search/SearchResultWonmun.do?category=search&f1=title&v1=${encodeURIComponent(book.title)}&f2=author&v2=&f3=pubDt&v3=&f4=category&v4=&f5=callNo&v5=&f6=isbn&v6=&pageNum=1&pageSize=10&order=score&sort=desc`;
+            console.log('🔗 Opening National Library title search:', searchUrl);
             window.open(searchUrl, '_blank');
+            new Notice(`🔗 "${book.title}"로 국립중앙도서관에서 검색 중...`);
           } else {
-            new Notice('상세 정보 링크를 찾을 수 없습니다.');
+            console.log('❌ No searchable information found for book');
+            new Notice('⚠️ 상세 정보를 위한 검색 조건을 찾을 수 없습니다.');
           }
         });
 
