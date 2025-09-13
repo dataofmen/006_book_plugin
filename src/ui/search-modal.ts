@@ -27,11 +27,11 @@ export class BookSearchModal extends Modal {
     contentEl.addClass('kr-book-search-modal');
 
     // 모달 크기 설정
-    this.modalEl.style.width = '90vw';
-    this.modalEl.style.maxWidth = '900px';
-    this.modalEl.style.height = '85vh';
-    this.modalEl.style.maxHeight = '700px';
-    this.modalEl.style.minHeight = '500px';
+    this.modalEl.style.width = '95vw';
+    this.modalEl.style.maxWidth = '1100px';
+    this.modalEl.style.height = '90vh';
+    this.modalEl.style.maxHeight = '800px';
+    this.modalEl.style.minHeight = '600px';
 
     // 제목
     contentEl.createEl('h2', { text: '📚 도서 검색' });
@@ -304,29 +304,51 @@ export class BookSearchModal extends Modal {
           await this.createBookNote(book);
         });
 
-      // 상세 정보 버튼 (상세 링크가 있는 경우)
-      if (book.detailLink) {
-        new ButtonComponent(actions)
-          .setButtonText('🔗 상세보기')
-          .onClick(() => {
+      // 상세 정보 버튼 (상세 링크가 있는 경우 또는 국립중앙도서관 검색 페이지로 링크)
+      new ButtonComponent(actions)
+        .setButtonText('🔗 상세보기')
+        .onClick(() => {
+          if (book.detailLink && book.detailLink.trim()) {
+            // 제공된 상세 링크가 있으면 그것을 사용
             window.open(book.detailLink, '_blank');
-          });
-      }
+          } else if (book.isbn) {
+            // ISBN이 있으면 국립중앙도서관 ISBN 검색 결과로 링크
+            const searchUrl = `https://www.nl.go.kr/kolisnet/search/searchResultList.do?tab=book&searchKeyword=${encodeURIComponent(book.isbn)}&searchField=isbn`;
+            window.open(searchUrl, '_blank');
+          } else if (book.title) {
+            // 제목으로 국립중앙도서관 검색
+            const searchUrl = `https://www.nl.go.kr/kolisnet/search/searchResultList.do?tab=book&searchKeyword=${encodeURIComponent(book.title)}`;
+            window.open(searchUrl, '_blank');
+          } else {
+            new Notice('상세 정보 링크를 찾을 수 없습니다.');
+          }
+        });
 
       // ISBN으로 재검색 버튼 (일반 검색에서 ISBN이 있는 경우)
-      if (this.searchType === 'keyword' && book.isbn) {
+      if (this.searchType === 'keyword' && book.isbn && book.isbn.trim()) {
         new ButtonComponent(actions)
           .setButtonText('📘 ISBN 상세검색')
           .onClick(async () => {
             try {
+              // 로딩 표시
+              const notice = new Notice('📘 ISBN으로 상세 정보를 검색하는 중...', 0);
+              
+              console.log(`🔍 Starting detailed ISBN search: ${book.isbn}`);
               const detailedBook = await this.api.searchByISBN(book.isbn);
+              
+              notice.hide();
+              
               if (detailedBook) {
+                console.log('✅ Detailed book found, creating note');
                 await this.createBookNote(detailedBook);
+                new Notice(`✅ "${detailedBook.title}" 상세 정보로 노트를 생성했습니다.`, 5000);
               } else {
-                new Notice('상세 정보를 찾을 수 없습니다.');
+                console.log('❌ No detailed book found');
+                new Notice('⚠️ 해당 ISBN으로 상세 정보를 찾을 수 없습니다.');
               }
             } catch (error) {
-              new Notice('상세 검색 실패: ' + error.message);
+              console.error('❌ ISBN detail search error:', error);
+              new Notice('❌ ISBN 상세 검색 실패: ' + error.message);
             }
           });
       }
