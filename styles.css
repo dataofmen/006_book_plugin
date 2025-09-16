@@ -1,106 +1,293 @@
-/* 한국 도서 검색 플러그인 스타일 */
+/* 한국 도서 검색 플러그인 - 모던 디자인 */
 
 .kr-book-search-modal {
-  max-width: 1100px;
-  width: 95vw;
-  max-height: 90vh;
-  min-height: 600px;
+  max-width: 800px;
+  width: min(90vw, 800px);
+  max-height: 85vh;
+  min-height: 500px;
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   overflow: visible !important;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--background-modifier-border-focus);
 }
 
 .kr-book-search-modal .modal-content {
-  padding: 30px;
-  max-height: calc(90vh - 60px);
+  padding: 48px;
+  max-height: calc(85vh - 96px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 40px;
+  background: var(--background-primary);
+  border-radius: 16px;
 }
 
 .kr-book-search-modal .modal-body {
   flex: 1;
   overflow-y: auto;
-  padding-right: 15px;
+  padding-right: 8px;
 }
 
-/* 검색 컨테이너 */
+/* 헤더 제목 영역 - 대폭 여백 증가 */
+.kr-book-search-modal h2 {
+  margin: 0 0 32px 0 !important;
+  padding: 20px 0 !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-align: center;
+  color: var(--text-normal);
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+/* 검색 영역 - 클린한 디자인 */
 .search-container {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
+  gap: 20px;
+  align-items: stretch;
+  background: var(--background-secondary);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.search-container:focus-within {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgba(var(--interactive-accent-rgb), 0.1);
 }
 
 .search-input {
   flex: 1;
-  padding: 8px 12px !important;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 24px 28px !important;
+  border: none !important;
+  border-radius: 8px;
+  font-size: 16px;
+  background: transparent !important;
+  color: var(--text-normal);
+  font-weight: 400;
+  transition: all 0.2s ease;
 }
 
 .search-input:focus {
-  outline: none;
-  border-color: var(--interactive-accent);
-  box-shadow: 0 0 0 2px var(--interactive-accent-hover);
+  outline: none !important;
+  background: var(--background-primary) !important;
 }
 
-/* 검색 타입 컨테이너 */
-.search-type-container {
-  margin-bottom: 15px;
-  padding: 10px;
+.search-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* 검색 버튼 스타일 개선 */
+.search-container .clickable-icon {
+  padding: 24px 32px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  background: var(--interactive-accent) !important;
+  color: var(--text-on-accent) !important;
+  border: 2px solid var(--interactive-accent) !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  min-width: 120px !important;
+}
+
+.search-container .clickable-icon:hover {
+  background: transparent !important;
+  color: var(--interactive-accent) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 검색 안내 텍스트 스타일 */
+.search-info-container {
+  margin: 0 0 32px 0;
+  padding: 20px 24px;
   background: var(--background-secondary);
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--background-modifier-border);
 }
 
-/* 고급 검색 옵션 */
+.search-info-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* 검색 방식 선택 - 넉넉한 여백 */
+.search-type-container {
+  background: var(--background-secondary);
+  border-radius: 12px;
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.search-type-container .setting-item {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.search-type-container .setting-item-info {
+  margin-bottom: 16px !important;
+}
+
+.search-type-container .setting-item-name {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--text-normal) !important;
+  margin-bottom: 8px !important;
+}
+
+.search-type-container .setting-item-description {
+  font-size: 14px !important;
+  color: var(--text-muted) !important;
+  margin-top: 8px !important;
+}
+
+/* 드롭다운 메뉴 강력한 스타일링 */
+.search-type-container select,
+.search-type-container .dropdown {
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--background-modifier-border) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  min-width: 200px !important;
+  background-color: white !important;
+  color: #333333 !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+.search-type-container select option,
+.search-type-container .dropdown option {
+  background-color: white !important;
+  color: #333333 !important;
+  padding: 12px 16px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.search-type-container select:focus,
+.search-type-container .dropdown:focus {
+  outline: 3px solid var(--interactive-accent) !important;
+  outline-offset: 2px !important;
+  border-color: var(--interactive-accent) !important;
+  background-color: white !important;
+  color: #333333 !important;
+}
+
+.search-type-container select:hover,
+.search-type-container .dropdown:hover {
+  border-color: var(--interactive-accent) !important;
+  background-color: #f8f9fa !important;
+}
+
+/* 모든 가능한 드롭다운 셀렉터 적용 */
+.search-type-container select,
+.search-type-container .dropdown,
+.kr-book-search-modal select,
+.kr-book-search-modal .dropdown,
+.kr-book-search-modal .setting-item-control select,
+.kr-book-search-modal .setting-item-control .dropdown,
+.kr-book-search-modal .setting-item select,
+.kr-book-search-modal .setting-item .dropdown,
+select[data-setting],
+.dropdown[data-setting] {
+  background: white !important;
+  background-color: white !important;
+  color: #2c3e50 !important;
+  border: 2px solid #bdc3c7 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  padding: 14px 18px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+.search-type-container select option,
+.search-type-container .dropdown option,
+.kr-book-search-modal select option,
+.kr-book-search-modal .dropdown option,
+.kr-book-search-modal .setting-item-control select option,
+.kr-book-search-modal .setting-item-control .dropdown option,
+.kr-book-search-modal .setting-item select option,
+.kr-book-search-modal .setting-item .dropdown option,
+select[data-setting] option,
+.dropdown[data-setting] option {
+  background: white !important;
+  background-color: white !important;
+  color: #2c3e50 !important;
+  padding: 14px 18px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+/* 고급 검색 - 단순화 */
 .advanced-search {
-  margin-bottom: 20px;
+  display: none; /* 고급 기능 숨김으로 단순화 */
 }
 
 .advanced-toggle {
-  background: var(--background-secondary);
+  background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 14px;
+  color: var(--text-normal);
   transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .advanced-toggle:hover {
   background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
 }
 
 .advanced-options {
-  margin-top: 10px;
-  padding: 15px;
-  background: var(--background-secondary);
-  border-radius: 8px;
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--background-primary);
+  border-radius: 12px;
   border: 1px solid var(--background-modifier-border);
 }
 
-/* 로딩 상태 */
+/* 로딩 상태 - 깔끔한 디자인 */
 .loading-container {
   text-align: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
   color: var(--text-muted);
 }
 
 .loading-text {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
   color: var(--text-normal);
 }
 
 .loading-subtext {
-  font-size: 14px;
-  opacity: 0.7;
+  font-size: 15px;
+  opacity: 0.8;
+  font-weight: 400;
 }
 
 /* 에러 상태 */
@@ -144,63 +331,72 @@
   opacity: 0.7;
 }
 
-/* 검색 결과 */
+/* 검색 결과 - 모던 카드 스타일 */
 .search-results {
   flex: 1;
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: auto;
-  margin-bottom: 20px;
+  border-radius: 12px;
+  background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
 }
 
 .results-header {
-  padding: 15px 20px;
+  padding: 20px 24px;
   background: var(--background-secondary);
   border-bottom: 1px solid var(--background-modifier-border);
   position: sticky;
   top: 0;
   z-index: 1;
+  border-radius: 12px 12px 0 0;
 }
 
 .results-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--text-normal);
+  letter-spacing: -0.02em;
 }
 
-/* 검색 결과 아이템 */
+/* 검색 결과 아이템 - 카드 스타일 */
 .result-item {
   display: flex;
-  padding: 20px;
+  padding: 24px;
   border-bottom: 1px solid var(--background-modifier-border);
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   position: relative;
+  cursor: pointer;
 }
 
 .result-item:hover {
   background: var(--background-modifier-hover);
+  transform: translateY(-1px);
 }
 
 .result-item:last-child {
   border-bottom: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.result-item:first-child {
+  border-radius: 0;
 }
 
 .result-index {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   background: var(--interactive-accent);
   color: white;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: 20px;
   flex-shrink: 0;
-  line-height: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .book-info {
@@ -270,21 +466,34 @@
   border-color: var(--interactive-accent);
 }
 
-/* 액션 버튼들 */
+/* 액션 버튼들 - 모던 버튼 스타일 */
 .book-actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-left: 15px;
+  gap: 12px;
+  margin-left: 20px;
   flex-shrink: 0;
 }
 
 .book-actions .clickable-icon {
-  min-width: 100px;
-  padding: 8px 12px;
-  font-size: 13px;
+  min-width: 120px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
   text-align: center;
   white-space: nowrap;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 2px solid var(--interactive-accent);
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.book-actions .clickable-icon:hover {
+  background: transparent;
+  color: var(--interactive-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 페이지네이션 */
@@ -363,42 +572,114 @@
   font-size: 12px;
 }
 
-/* 반응형 디자인 */
+/* 반응형 디자인 - 모바일 최적화 */
 @media (max-width: 768px) {
   .kr-book-search-modal {
     width: 95vw !important;
-    height: 90vh !important;
-    max-height: 90vh !important;
-    min-height: 400px !important;
-    top: 5vh !important;
+    height: 95vh !important;
+    max-height: 95vh !important;
+    min-height: 500px !important;
+    top: 2.5vh !important;
+    border-radius: 12px;
     transform: translateX(-50%) !important;
+  }
+  
+  .kr-book-search-modal .modal-content {
+    padding: 32px;
+    gap: 32px;
+  }
+  
+  .kr-book-search-modal h2 {
+    margin: 0 0 24px 0 !important;
+    padding: 16px 0 !important;
+    font-size: 22px !important;
+  }
+  
+  .search-type-container {
+    padding: 20px 24px !important;
+    margin-bottom: 20px !important;
   }
   
   .search-container {
     flex-direction: column;
-    align-items: stretch;
+    gap: 20px;
+    padding: 12px;
+  }
+  
+  .search-input {
+    padding: 24px 28px !important;
+    font-size: 16px;
   }
   
   .result-item {
     flex-direction: column;
-    padding: 15px;
+    padding: 20px;
+    gap: 16px;
   }
   
   .result-index {
     align-self: flex-start;
-    margin-bottom: 10px;
     margin-right: 0;
+    margin-bottom: 0;
+  }
+  
+  .book-info {
+    width: 100%;
+  }
+  
+  .book-title {
+    font-size: 16px;
+    margin-bottom: 16px;
   }
   
   .book-actions {
     flex-direction: row;
     margin-left: 0;
-    margin-top: 15px;
+    gap: 8px;
+    width: 100%;
   }
   
   .book-actions .clickable-icon {
     flex: 1;
     min-width: 0;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kr-book-search-modal .modal-content {
+    padding: 24px;
+    gap: 24px;
+  }
+  
+  .kr-book-search-modal h2 {
+    margin: 0 0 20px 0 !important;
+    padding: 12px 0 !important;
+    font-size: 20px !important;
+  }
+  
+  .search-type-container {
+    padding: 16px 20px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .search-input {
+    padding: 20px 24px !important;
+    font-size: 16px;
+  }
+  
+  .result-item {
+    padding: 20px;
+  }
+  
+  .book-title {
+    font-size: 15px;
+  }
+  
+  .book-actions .clickable-icon {
+    padding: 14px 16px;
+    font-size: 12px;
   }
 }
 
@@ -408,6 +689,69 @@
   color: var(--text-normal);
 }
 
+/* CSS 변수 기반 드롭다운 스타일링 */
+:root {
+  --dropdown-bg-light: #ffffff;
+  --dropdown-text-light: #1a202c;
+  --dropdown-border-light: #cbd5e0;
+  --dropdown-bg-dark: #2d3748;
+  --dropdown-text-dark: #ffffff;
+  --dropdown-border-dark: #4a5568;
+}
+
+/* 강력한 CSS 변수 기반 스타일 */
+.kr-book-search-modal .search-type-container select,
+.kr-book-search-modal .search-type-container .dropdown,
+.kr-book-search-modal select,
+.kr-book-search-modal .dropdown {
+  background: var(--dropdown-bg-light) !important;
+  background-color: var(--dropdown-bg-light) !important;
+  color: var(--dropdown-text-light) !important;
+  border: 2px solid var(--dropdown-border-light) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  padding: 14px 18px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  outline: none !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+.kr-book-search-modal .search-type-container select option,
+.kr-book-search-modal .search-type-container .dropdown option,
+.kr-book-search-modal select option,
+.kr-book-search-modal .dropdown option {
+  background: var(--dropdown-bg-light) !important;
+  background-color: var(--dropdown-bg-light) !important;
+  color: var(--dropdown-text-light) !important;
+  padding: 12px 16px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+/* 다크 모드 CSS 변수 오버라이드 */
+.theme-dark .kr-book-search-modal .search-type-container select,
+.theme-dark .kr-book-search-modal .search-type-container .dropdown,
+.theme-dark .kr-book-search-modal select,
+.theme-dark .kr-book-search-modal .dropdown {
+  background: var(--dropdown-bg-dark) !important;
+  background-color: var(--dropdown-bg-dark) !important;
+  color: var(--dropdown-text-dark) !important;
+  border: 2px solid var(--dropdown-border-dark) !important;
+}
+
+.theme-dark .kr-book-search-modal .search-type-container select option,
+.theme-dark .kr-book-search-modal .search-type-container .dropdown option,
+.theme-dark .kr-book-search-modal select option,
+.theme-dark .kr-book-search-modal .dropdown option {
+  background: var(--dropdown-bg-dark) !important;
+  background-color: var(--dropdown-bg-dark) !important;
+  color: var(--dropdown-text-dark) !important;
+}
+
 .theme-dark .extra-tag {
   background: var(--background-primary-alt);
   border-color: var(--background-modifier-border-hover);
@@ -415,6 +759,101 @@
 
 .theme-dark .result-item:hover {
   background: var(--background-primary-alt);
+}
+
+/* 드롭다운 텍스트 강제 표시 - 텍스트 잘림 방지 */
+.kr-book-search-modal select,
+.kr-book-search-modal .dropdown,
+.kr-book-search-modal .setting-item select,
+.kr-book-search-modal .search-type-container select,
+.kr-book-search-modal * select {
+  background-color: #ffffff !important;
+  color: #1a202c !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  font-family: var(--font-ui-medium), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  padding: 12px 16px !important;
+  border: 2px solid #cbd5e0 !important;
+  border-radius: 8px !important;
+  min-height: 44px !important;
+  height: auto !important;
+  line-height: 1.5 !important;
+  width: 100% !important;
+  display: block !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  text-indent: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  z-index: 999999 !important;
+}
+
+.kr-book-search-modal select option,
+.kr-book-search-modal .dropdown option,
+.kr-book-search-modal .setting-item select option,
+.kr-book-search-modal .search-type-container select option,
+.kr-book-search-modal * select option {
+  background-color: #ffffff !important;
+  color: #1a202c !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  font-family: var(--font-ui-medium), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  padding: 10px 16px !important;
+  line-height: 1.5 !important;
+  height: auto !important;
+  min-height: 40px !important;
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  z-index: 999999 !important;
+}
+
+/* 다크 테마 극강 오버라이드 - 텍스트 잘림 방지 */
+.theme-dark .kr-book-search-modal select,
+.theme-dark .kr-book-search-modal .dropdown,
+.theme-dark .kr-book-search-modal .setting-item select,
+.theme-dark .kr-book-search-modal .search-type-container select,
+.theme-dark .kr-book-search-modal * select {
+  background-color: #2d3748 !important;
+  color: #ffffff !important;
+  border: 2px solid #4a5568 !important;
+  font-size: 14px !important;
+  padding: 12px 16px !important;
+  height: auto !important;
+  min-height: 44px !important;
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+.theme-dark .kr-book-search-modal select option,
+.theme-dark .kr-book-search-modal .dropdown option,
+.theme-dark .kr-book-search-modal .setting-item select option,
+.theme-dark .kr-book-search-modal .search-type-container select option,
+.theme-dark .kr-book-search-modal * select option {
+  background-color: #2d3748 !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  height: auto !important;
+  min-height: 40px !important;
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
 }
 
 /* 접근성 개선 */
@@ -441,21 +880,39 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* 스크롤바 스타일링 */
+/* 스크롤바 스타일링 - 모던하게 */
 .search-results::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .search-results::-webkit-scrollbar-track {
-  background: var(--background-secondary);
-  border-radius: 4px;
+  background: transparent;
+  border-radius: 3px;
 }
 
 .search-results::-webkit-scrollbar-thumb {
   background: var(--background-modifier-border);
-  border-radius: 4px;
+  border-radius: 3px;
+  transition: background 0.2s ease;
 }
 
 .search-results::-webkit-scrollbar-thumb:hover {
-  background: var(--background-modifier-border-hover);
+  background: var(--interactive-accent);
+}
+
+.kr-book-search-modal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kr-book-search-modal .modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kr-book-search-modal .modal-body::-webkit-scrollbar-thumb {
+  background: var(--background-modifier-border);
+  border-radius: 3px;
+}
+
+.kr-book-search-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--interactive-accent);
 }

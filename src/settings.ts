@@ -50,11 +50,6 @@ created: {{date}}
 {{summary}}
 {{/if}}
 
-{{#if tableOfContents}}
-## 📑 목차
-{{tableOfContents}}
-{{/if}}
-
 ## 🗒️ 메모
 
 ## 💭 인용구

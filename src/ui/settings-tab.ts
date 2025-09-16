@@ -35,19 +35,17 @@ export class KRBookSettingTab extends PluginSettingTab {
             return;
           }
           
-          const api = new NationalLibraryAPI(this.plugin.settings.apiKey);
-          const isValid = await api.validateApiKey();
-          
-          if (isValid) {
-            new Notice('API 키가 유효합니다.');
-          } else {
-            new Notice('API 키가 유효하지 않습니다. 다시 확인해주세요.');
-          }
+          new Notice('API 키가 저장되었습니다.');
         }));
 
     // API 키 발급 안내
-    containerEl.createDiv('setting-item-description').innerHTML = 
+    containerEl.createDiv('setting-item-description').innerHTML =
       'API 키는 <a href="https://www.nl.go.kr/NL/contents/N31101030700.do">국립중앙도서관 Open API</a>에서 발급받을 수 있습니다.';
+
+
+
+    // 구분선
+    containerEl.createEl('h3', { text: '📁 노트 설정' });
 
     // 노트 폴더 설정
     new Setting(containerEl)

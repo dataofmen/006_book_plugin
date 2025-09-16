@@ -40,10 +40,10 @@ export function registerDebugCommands(plugin: Plugin, apiKey: string) {
       console.log(`ISBN ${testISBN} 검색 중...`);
       
       try {
-        const book = await api.searchByISBN(testISBN);
-        if (book) {
-          console.log('ISBN 검색 성공:', book);
-          new Notice(`도서 발견: ${book.title}`);
+        const books = await api.searchBooks({ isbn: testISBN });
+        if (books.length > 0) {
+          console.log('ISBN 검색 성공:', books[0]);
+          new Notice(`도서 발견: ${books[0].title}`);
         } else {
           console.log('도서를 찾을 수 없음');
           new Notice('도서를 찾을 수 없습니다.');

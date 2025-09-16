@@ -28,8 +28,7 @@ export class BookNoteTemplate {
       volume: book.volume || '',
       edition: book.edition || '',
       summary: book.summary || '',
-      tableOfContents: book.tableOfContents || '',
-      detailLink: book.detailLink || '',
+      detailLink: this.generateDetailLink(book),
       coverImage: book.coverImage || '',
       ebook: book.ebook,
       date: window.moment().format('YYYY-MM-DD'),
@@ -152,5 +151,37 @@ export class BookNoteTemplate {
     // 천 단위 콤마 추가
     const formatted = parseInt(numericPrice).toLocaleString('ko-KR');
     return `${formatted}원`;
+  }
+
+  /**
+   * 국립중앙도서관 상세페이지 링크 생성
+   */
+  static generateDetailLink(book: Book): string {
+    // 기존 detailLink가 있으면 처리
+    if (book.detailLink) {
+      // 이미 완전한 URL인 경우
+      if (book.detailLink.startsWith('http')) {
+        return book.detailLink;
+      }
+      // 상대 경로인 경우 절대 경로로 변환
+      if (book.detailLink.startsWith('/')) {
+        return `https://www.nl.go.kr${book.detailLink}`;
+      }
+    }
+
+    // ISBN이 있으면 ISBN 기반 검색 링크 생성
+    if (book.isbn) {
+      const cleanIsbn = book.isbn.replace(/[^0-9X]/g, '');
+      return `https://www.nl.go.kr/NL/contents/search.do?query=${cleanIsbn}&searchTarget=isbn`;
+    }
+
+    // 제목과 저자로 검색 링크 생성
+    if (book.title) {
+      const searchQuery = encodeURIComponent(book.title + (book.author ? ' ' + book.author : ''));
+      return `https://www.nl.go.kr/NL/contents/search.do?query=${searchQuery}`;
+    }
+
+    // 기본 국립중앙도서관 홈페이지
+    return 'https://www.nl.go.kr';
   }
 }

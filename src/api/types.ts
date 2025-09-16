@@ -62,7 +62,6 @@ export interface Book {
   ddc?: string;
   subject?: string;
   summary?: string;
-  tableOfContents?: string;
   coverImage?: string;
   series?: string;
   volume?: string;
@@ -70,6 +69,17 @@ export interface Book {
   ebook: boolean;
   callNumber?: string;
   detailLink?: string;
+  controlNo?: string; // 추출된 CONTROL_NO 저장용
+
+  // 카카오 API 추가 필드
+  kakaoUrl?: string;
+  kakaoThumbnail?: string;
+  kakaoContents?: string;
+  kakaoPrice?: number;
+  kakaoSalePrice?: number;
+  kakaoTableOfContents?: string;
+  source?: 'nlk' | 'kakao' | 'integrated';
+  hasKakaoData?: boolean;
 }
 
 export interface SearchParams {

@@ -12,7 +12,7 @@ export class BookSearchModal extends Modal {
   private paginationContainer: HTMLElement;
   private currentPage = 1;
   private totalResults = 0;
-  public searchType: 'keyword' | 'isbn' = 'keyword';
+  public searchType: 'keyword' = 'keyword';
   private isSearching = false;
 
   constructor(app: App, plugin: KRBookPlugin) {
@@ -27,31 +27,21 @@ export class BookSearchModal extends Modal {
     contentEl.addClass('kr-book-search-modal');
 
     // 모달 크기 설정
-    this.modalEl.style.width = '95vw';
-    this.modalEl.style.maxWidth = '1100px';
-    this.modalEl.style.height = '90vh';
-    this.modalEl.style.maxHeight = '800px';
-    this.modalEl.style.minHeight = '600px';
+    this.modalEl.style.width = '60vw';
+    this.modalEl.style.maxWidth = '700px';
+    this.modalEl.style.height = '60vh';
+    this.modalEl.style.maxHeight = '500px';
+    this.modalEl.style.minHeight = '400px';
 
     // 제목
     contentEl.createEl('h2', { text: '📚 도서 검색' });
 
-    // 검색 타입 선택
-    const searchTypeContainer = contentEl.createDiv('search-type-container');
-    
-    new Setting(searchTypeContainer)
-      .setName('검색 방식')
-      .setDesc('키워드 검색은 제목, 저자, 출판사를 통합 검색합니다')
-      .addDropdown(dropdown => {
-        dropdown
-          .addOption('keyword', '🔍 키워드 검색')
-          .addOption('isbn', '📘 ISBN 검색')
-          .setValue(this.searchType)
-          .onChange(value => {
-            this.searchType = value as 'keyword' | 'isbn';
-            this.updateSearchPlaceholder();
-          });
-      });
+    // 검색 방식 안내 (키워드 검색만 제공)
+    const searchInfoContainer = contentEl.createDiv('search-info-container');
+    searchInfoContainer.createEl('p', { 
+      text: '🔍 키워드 검색 - 제목, 저자, 출판사를 통합 검색합니다',
+      cls: 'search-info-text'
+    });
 
     // 검색 입력
     const searchContainer = contentEl.createDiv('search-container');
@@ -129,11 +119,7 @@ export class BookSearchModal extends Modal {
   }
 
   private updateSearchPlaceholder() {
-    if (this.searchType === 'isbn') {
-      this.searchInput.setPlaceholder('📘 ISBN을 입력하세요 (예: 978-89-123-4567-8 또는 9788912345678)');
-    } else {
-      this.searchInput.setPlaceholder('🔍 제목, 저자, 출판사 등을 입력하세요 (예: 토지, 박경리, 창비)');
-    }
+    this.searchInput.setPlaceholder('🔍 제목, 저자, 출판사 등을 입력하세요 (예: 토지, 박경리, 창비)');
   }
 
   private async performSearch() {
@@ -158,34 +144,20 @@ export class BookSearchModal extends Modal {
     loadingEl.createEl('div', { text: `"${query}" 관련 도서를 찾고 있습니다.`, cls: 'loading-subtext' });
 
     try {
-      console.log(`🔍 Starting search: "${query}" (type: ${this.searchType})`);
+      console.log(`🔍 Starting keyword search: "${query}"`);
       
-      if (this.searchType === 'isbn') {
-        // ISBN 검색
-        const book = await this.api.searchByISBN(query);
-        if (book) {
-          this.searchResults = [book];
-          this.totalResults = 1;
-          console.log('✅ ISBN search successful');
-        } else {
-          this.searchResults = [];
-          this.totalResults = 0;
-          console.log('❌ No book found for ISBN');
-        }
-      } else {
-        // 키워드 검색
-        const searchParams = {
-          query,
-          pageNum: this.currentPage,
-          pageSize: this.plugin.settings.searchResultLimit,
-          sort: this.sortOption?.getValue() as any,
-          order: this.orderOption?.getValue() as any
-        };
+      // 키워드 검색만 제공
+      const searchParams = {
+        query,
+        pageNum: this.currentPage,
+        pageSize: this.plugin.settings.searchResultLimit,
+        sort: this.sortOption?.getValue() as any,
+        order: this.orderOption?.getValue() as any
+      };
 
-        this.searchResults = await this.api.searchBooks(searchParams);
-        this.totalResults = this.searchResults.length;
-        console.log(`✅ Keyword search found ${this.totalResults} books`);
-      }
+      this.searchResults = await this.api.searchBooks(searchParams);
+      this.totalResults = this.searchResults.length;
+      console.log(`✅ Keyword search found ${this.totalResults} books`);
 
       this.displayResults();
     } catch (error) {
@@ -213,12 +185,7 @@ export class BookSearchModal extends Modal {
     if (this.searchResults.length === 0) {
       const noResultsContainer = this.resultsContainer.createEl('div', { cls: 'no-results-container' });
       noResultsContainer.createEl('div', { text: '📭 검색 결과가 없습니다', cls: 'no-results-title' });
-      
-      if (this.searchType === 'isbn') {
-        noResultsContainer.createEl('div', { text: 'ISBN이 정확한지 확인해주세요.', cls: 'no-results-suggestion' });
-      } else {
-        noResultsContainer.createEl('div', { text: '다른 키워드로 검색해보세요.', cls: 'no-results-suggestion' });
-      }
+      noResultsContainer.createEl('div', { text: '다른 키워드로 검색해보세요.', cls: 'no-results-suggestion' });
       
       return;
     }
@@ -293,6 +260,24 @@ export class BookSearchModal extends Modal {
         extraInfo.createEl('span', { text: '💻 전자책', cls: 'extra-tag ebook-tag' });
       }
 
+      // 카카오 통합 정보 표시
+      if (book.hasKakaoData) {
+        extraInfo.createEl('span', { text: '🥕 카카오 연동', cls: 'extra-tag kakao-tag' });
+
+        // 카카오 가격 정보 (할인가가 있는 경우)
+        if (book.kakaoSalePrice && book.kakaoPrice && book.kakaoSalePrice < book.kakaoPrice) {
+          extraInfo.createEl('span', {
+            text: `💰 ${book.kakaoSalePrice.toLocaleString()}원 (할인)`,
+            cls: 'extra-tag price-sale-tag'
+          });
+        } else if (book.kakaoPrice) {
+          extraInfo.createEl('span', {
+            text: `💰 ${book.kakaoPrice.toLocaleString()}원`,
+            cls: 'extra-tag price-tag'
+          });
+        }
+      }
+
       // 액션 버튼들
       const actions = resultItem.createDiv('book-actions');
       
@@ -304,64 +289,6 @@ export class BookSearchModal extends Modal {
           await this.createBookNote(book);
         });
 
-      // 상세 정보 버튼 (상세 링크가 있는 경우 또는 국립중앙도서관 검색 페이지로 링크)
-      new ButtonComponent(actions)
-        .setButtonText('🔗 상세보기')
-        .onClick(() => {
-          console.log('🔗 Detail view button clicked for book:', book.title);
-          
-          if (book.detailLink && book.detailLink.trim()) {
-            // 제공된 상세 링크가 있으면 그것을 사용
-            console.log('🔗 Opening provided detail link:', book.detailLink);
-            window.open(book.detailLink, '_blank');
-            new Notice('🔗 상세 정보 페이지를 여는 중...');
-          } else if (book.isbn && book.isbn.trim()) {
-            // ISBN이 있으면 국립중앙도서관 통합검색으로 링크
-            const cleanIsbn = book.isbn.replace(/[-\s]/g, '');
-            const searchUrl = `https://www.nl.go.kr/NL/search/SearchResultWonmun.do?category=search&f1=title&v1=&f2=author&v2=&f3=pubDt&v3=&f4=category&v4=&f5=callNo&v5=&f6=isbn&v6=${encodeURIComponent(cleanIsbn)}&pageNum=1&pageSize=10&order=score&sort=desc`;
-            console.log('🔗 Opening National Library ISBN search:', searchUrl);
-            window.open(searchUrl, '_blank');
-            new Notice(`🔗 ISBN(${book.isbn})로 국립중앙도서관에서 검색 중...`);
-          } else if (book.title && book.title.trim()) {
-            // 제목으로 국립중앙도서관 통합검색
-            const searchUrl = `https://www.nl.go.kr/NL/search/SearchResultWonmun.do?category=search&f1=title&v1=${encodeURIComponent(book.title)}&f2=author&v2=&f3=pubDt&v3=&f4=category&v4=&f5=callNo&v5=&f6=isbn&v6=&pageNum=1&pageSize=10&order=score&sort=desc`;
-            console.log('🔗 Opening National Library title search:', searchUrl);
-            window.open(searchUrl, '_blank');
-            new Notice(`🔗 "${book.title}"로 국립중앙도서관에서 검색 중...`);
-          } else {
-            console.log('❌ No searchable information found for book');
-            new Notice('⚠️ 상세 정보를 위한 검색 조건을 찾을 수 없습니다.');
-          }
-        });
-
-      // ISBN으로 재검색 버튼 (일반 검색에서 ISBN이 있는 경우)
-      if (this.searchType === 'keyword' && book.isbn && book.isbn.trim()) {
-        new ButtonComponent(actions)
-          .setButtonText('📘 ISBN 상세검색')
-          .onClick(async () => {
-            try {
-              // 로딩 표시
-              const notice = new Notice('📘 ISBN으로 상세 정보를 검색하는 중...', 0);
-              
-              console.log(`🔍 Starting detailed ISBN search: ${book.isbn}`);
-              const detailedBook = await this.api.searchByISBN(book.isbn);
-              
-              notice.hide();
-              
-              if (detailedBook) {
-                console.log('✅ Detailed book found, creating note');
-                await this.createBookNote(detailedBook);
-                new Notice(`✅ "${detailedBook.title}" 상세 정보로 노트를 생성했습니다.`, 5000);
-              } else {
-                console.log('❌ No detailed book found');
-                new Notice('⚠️ 해당 ISBN으로 상세 정보를 찾을 수 없습니다.');
-              }
-            } catch (error) {
-              console.error('❌ ISBN detail search error:', error);
-              new Notice('❌ ISBN 상세 검색 실패: ' + error.message);
-            }
-          });
-      }
     });
 
     this.updatePagination();
@@ -370,7 +297,7 @@ export class BookSearchModal extends Modal {
   private updatePagination() {
     this.paginationContainer.empty();
     
-    if (this.totalResults <= this.plugin.settings.searchResultLimit || this.searchType === 'isbn') {
+    if (this.totalResults <= this.plugin.settings.searchResultLimit) {
       return;
     }
 
@@ -424,6 +351,7 @@ export class BookSearchModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
   }
+
 
   // 고급 검색 옵션 참조
   private sortOption: any;
